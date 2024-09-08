@@ -25,22 +25,42 @@ const appData = {
     title: '',
     screens: [],
     screenPrice: 0,
-    adaptive: true,
+    screenCount: 0,
     servicesPrecent: {},
     servicesNumber: {},
     servicePricesPercent: 0,
     servicePricesNumber: 0,
     fullPrice: 0,
     servicePercentPrice: 0,
-    rollback: 10,
+    rollback: 0,
     init: function () {
         appData.addTitle();
 
-        startBtn.addEventListener('click', appData.start);
+        startBtn.addEventListener('click', appData.checkSelectScreen);
         screenBtn.addEventListener('click', appData.addScreenBlock);
+        range.addEventListener('input', appData.addRollback);
     },
     addTitle: function () {
         document.title = title.textContent;
+        appData.title = title.textContent;
+    },
+    checkSelectScreen: function () {
+        let arr = []
+
+        screens.forEach(function (screen) {
+            const selectValue = screen.querySelector('select').value;
+            const inputValue = screen.querySelector('input').value;
+
+            arr.push(selectValue, inputValue)
+        })
+
+        let result = arr.find(function (item) {
+            return item === '';
+        })
+
+        if (result === undefined) {
+            appData.start();
+        } else alert('Введите тип и количество экранов!')
     },
     addScreenBlock: function () {
         const cloneScreen = screens[0].cloneNode(true);
@@ -48,15 +68,17 @@ const appData = {
         screens[screens.length - 1].after(cloneScreen);
         screens = document.querySelectorAll('.screen');
     },
+    addRollback: function () {
+        rangeValue.textContent = range.value + "%";
+        appData.rollback = range.value;
+    },
     start: function () {
         appData.addScreens();
         appData.addServices();
         appData.addPrices();
-        // appData.getServicePercentPrices();
-
-        // appData.logger();
-        console.log(appData);
         appData.showResult();
+
+        appData.logger();
     },
     addScreens: function () {
         screens.forEach(function (screen, index) {
@@ -67,7 +89,8 @@ const appData = {
             appData.screens.push({
                 id: index,
                 name: selectName,
-                price: +select.value * +input.value
+                price: +select.value * +input.value,
+                count: input.value
             });
         })
     },
@@ -105,50 +128,22 @@ const appData = {
             appData.servicePricesPercent += appData.screenPrice * (appData.servicesPrecent[key] / 100);
         }
 
+        for (let key of appData.screens) {
+            appData.screenCount += +key.count;
+        }
+
         appData.fullPrice = appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
+        appData.servicePercentPrice = appData.fullPrice - appData.fullPrice * (appData.rollback / 100);
     },
     showResult: function () {
         total.value = appData.screenPrice;
+        totalCount.value = appData.screenCount;
         totalCountOther.value = appData.servicePricesNumber + appData.servicePricesPercent;
         fullTotalCount.value = appData.fullPrice;
-    },
-    getServicePercentPrices: function () {
-        appData.servicePercentPrice = appData.fullPrice - appData.fullPrice * (appData.rollback / 100);
-    },
-    getRollbackMessage: function (price) {
-        switch (true) {
-            case price >= 30000:
-                return "Даем скидку в 10%";
-            case price >= 15000 && price < 30000:
-                return "Даем скидку в 5%";
-            case price >= 0 && price < 15000:
-                return "Скидка не предусмотрена";
-            case price < 0:
-                return "Что-то пошло не так";
-        }
+        totalCountRollback.value = appData.servicePercentPrice;
     },
     logger: function () {
-        console.log(appData.title);
-        console.log(appData.fullPrice);
-        console.log(appData.servicePercentPrice);
-        console.log(appData.getRollbackMessage(this.fullPrice));
-        console.log(appData.services);
-        console.log(appData.screens);
-
-        console.log(title);
-        console.log(startBtn);
-        console.log(resetBtn);
-        console.log(screenBtn);
-        console.log(percent);
-        console.log(number);
-        console.log(range);
-        console.log(rangeValue);
-        console.log(total);
-        console.log(totalCount);
-        console.log(totalCountOther);
-        console.log(fullTotalCount);
-        console.log(totalCountRollback);
-        console.log(screens);
+        console.log(appData);
     }
 }
 
