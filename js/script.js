@@ -1,14 +1,25 @@
 'use strict';
 
-const title = document.getElementsByTagName('h1');
-const handlerBtn = document.getElementsByClassName('handler_btn');
-const screenBtn = document.querySelector('.screen-btn');
-const percent = document.querySelectorAll('.percent');
-const number = document.querySelectorAll('.number ');
-const range = document.querySelector('.rollback > div > input');
-const rangeValue = document.querySelector('.rollback > div > span');
-const totalInput = document.getElementsByClassName('total-input');
+const title = document.getElementsByTagName('h1')[0];
+
 let screen = document.querySelectorAll('.screen');
+
+const screenBtn = document.querySelector('.screen-btn');
+
+const percent = document.querySelectorAll('.other-items.percent');
+const number = document.querySelectorAll('.other-items.number ');
+
+const range = document.querySelector('.rollback input');
+const rangeValue = document.querySelector('.rollback .range-value');
+
+const total = document.getElementsByClassName('total-input')[0];
+const totalCount = document.getElementsByClassName('total-input')[1];
+const totalCountOther = document.getElementsByClassName('total-input')[2];
+const fullTotalCount = document.getElementsByClassName('total-input')[3];
+const totalCountRollback = document.getElementsByClassName('total-input')[4];
+
+const startBtn = document.getElementsByClassName('handler_btn')[0];
+const resetBtn = document.getElementsByClassName('handler_btn')[1];
 
 const appData = {
     title: '',
@@ -109,18 +120,19 @@ const appData = {
         console.log(this.services);
         console.log(this.screens);
 
-        console.log(title[0]);
-        console.log(handlerBtn);
+        console.log(title);
+        console.log(startBtn);
+        console.log(resetBtn);
         console.log(screenBtn);
         console.log(percent);
         console.log(number);
         console.log(range);
         console.log(rangeValue);
-        console.log(totalInput[0]);
-        console.log(totalInput[1]);
-        console.log(totalInput[2]);
-        console.log(totalInput[3]);
-        console.log(totalInput[4]);
+        console.log(total);
+        console.log(totalCount);
+        console.log(totalCountOther);
+        console.log(fullTotalCount);
+        console.log(totalCountRollback);
         console.log(screen);
     }
 }
