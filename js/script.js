@@ -71,6 +71,9 @@ const appData = {
     addRollback: function () {
         rangeValue.textContent = range.value + "%";
         appData.rollback = range.value;
+
+        appData.servicePercentPrice = appData.fullPrice - appData.fullPrice * (appData.rollback / 100);
+        appData.showResult();
     },
     start: function () {
         appData.addScreens();
