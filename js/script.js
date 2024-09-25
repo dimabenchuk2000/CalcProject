@@ -41,16 +41,16 @@ const appData = {
     servicePercentPrice: 0,
     rollback: 0,
     init: function () {
-        appData.addTitle();
-        appData.logger();
+        this.addTitle();
+        this.logger();
 
-        startBtn.addEventListener('click', appData.checkSelectScreen);
-        screenBtn.addEventListener('click', appData.addScreenBlock);
+        startBtn.addEventListener('click', this.checkSelectScreen);
+        screenBtn.addEventListener('click', this.addScreenBlock);
 
-        cmsOpen.addEventListener('change', appData.cmsBlockShow);
-        cmsSelect.addEventListener('change', appData.cmsShowInput);
+        cmsOpen.addEventListener('change', this.cmsBlockShow);
+        cmsSelect.addEventListener('change', this.cmsShowInput);
 
-        range.addEventListener('input', appData.addRollback);
+        range.addEventListener('input', this.addRollback);
 
         resetBtn.addEventListener('click', this.reset);
     },
@@ -85,6 +85,7 @@ const appData = {
         })
 
         screenBtn.disabled = 'true';
+        cmsInput.disabled = 'true';
 
         startBtn.style.display = "none";
         resetBtn.style.display = "block";
@@ -102,6 +103,7 @@ const appData = {
         })
 
         screenBtn.disabled = false;
+        cmsInput.disabled = false;
 
         startBtn.style.display = "block";
         resetBtn.style.display = "none";
@@ -124,6 +126,7 @@ const appData = {
         if (result === undefined) {
             appData.blockingSelect();
             appData.start();
+
         } else alert('Введите тип и количество экранов!')
     },
     addScreenBlock: function () {
@@ -143,11 +146,11 @@ const appData = {
     },
     start: function () {
         // При нажатии кнопки рассчитать запускаются следующие методы
-        appData.addScreens();
-        appData.addServices();
-        appData.addCmsPercent();
-        appData.addPrices();
-        appData.showResult();
+        this.addScreens();
+        this.addServices();
+        this.addCmsPercent();
+        this.addPrices();
+        this.showResult();
 
         this.logger();
     },
@@ -198,13 +201,13 @@ const appData = {
     },
     addPrices: function () {
         // с помощью reduce перебираем массив appData.screens и суммируем свойсво price каждого объекта массива
-        appData.screenPrice = appData.screens.reduce(function (sum, item) {
+        this.screenPrice = this.screens.reduce(function (sum, item) {
             return sum + item.price
         }, 0)
 
         // с помощью for in перебираем объект appData.servicesNumber и суммируем значения свойств
-        for (let key in appData.servicesNumber) {
-            appData.servicePricesNumber += appData.servicesNumber[key];
+        for (let key in this.servicesNumber) {
+            this.servicePricesNumber += this.servicesNumber[key];
         }
 
         for (let key in this.servicesPrecent) {
@@ -212,12 +215,12 @@ const appData = {
         }
 
         // с помощью for of перебираем массив appData.screens и суммируем значения свойств
-        for (let key of appData.screens) {
-            appData.screenCount += +key.count;
+        for (let key of this.screens) {
+            this.screenCount += +key.count;
         }
-        let sum = appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
-        appData.fullPrice = sum + sum * (this.cmsPercent / 100);
-        appData.servicePercentPrice = appData.fullPrice - appData.fullPrice * (appData.rollback / 100);
+        this.fullPrice = this.screenPrice + this.servicePricesNumber + this.servicePricesPercent;
+        this.fullPrice = this.fullPrice + this.fullPrice * (this.cmsPercent / 100);
+        this.servicePercentPrice = this.fullPrice - this.fullPrice * (this.rollback / 100);
     },
     showResult: function () {
         total.value = this.screenPrice;
@@ -234,18 +237,18 @@ const appData = {
         appData.unlockingSelect();
     },
     resetProperties: function () {
-        appData.screenPrice = 0;
-        appData.screenCount = 0;
-        appData.servicePricesNumber = 0;
-        appData.servicePricesPercent = 0;
-        appData.cmsPercent = 0;
-        appData.fullPrice = 0;
-        appData.servicePercentPrice = 0;
-        appData.screens = [];
+        this.screenPrice = 0;
+        this.screenCount = 0;
+        this.servicePricesNumber = 0;
+        this.servicePricesPercent = 0;
+        this.cmsPercent = 0;
+        this.fullPrice = 0;
+        this.servicePercentPrice = 0;
+        this.screens = [];
 
         range.value = 0;
 
-        appData.addRollback();
+        this.addRollback();
     },
     resetCms: function () {
         hiddenCmsVariants.style.display = 'none';
